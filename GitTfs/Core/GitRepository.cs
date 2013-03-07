@@ -95,9 +95,9 @@ namespace Sep.Git.Tfs.Core
                             .WithRecommendation("Try setting a legacy-url for an existing remote.");
                     return new DerivedGitTfsRemote(tfsUrl, tfsRepositoryPath);
                 case 1:
-                    Trace.WriteLine("One remote matched");
+                    //Trace.WriteLine("One remote matched");
                     var remote = matchingRemotes.First();
-                    remote.EnsureTfsAuthenticated();
+                    //remote.EnsureTfsAuthenticated();
                     return remote;
                 default:
                     Trace.WriteLine("More than one remote matched!");
@@ -342,6 +342,12 @@ namespace Sep.Git.Tfs.Core
             }
 
             return GitTfsConstants.TfsCommitInfoRegex.Replace(message.ToString(), "").Trim(' ', '\r', '\n');
+        }
+
+        public string GetCommitMessage(string commitish)
+        {
+            var commit = _repository.Lookup<Commit>(commitish);
+            return GitTfsConstants.TfsCommitInfoRegex.Replace(commit.Message, "").Trim(' ', '\r', '\n');
         }
 
         private static string NormalizeLineEndings(string input)
